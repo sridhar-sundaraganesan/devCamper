@@ -1,0 +1,46 @@
+const fs = require('fs')
+const colors = require('colors')
+const dotenv = require('dotenv')
+const mongoose = require('mongoose')
+
+//To load env vars
+dotenv.config({ path: './config/config.env' })
+
+//To load bootcamp models
+
+const Bootcamp = require('./models/Bootcamp')
+
+//To connect to Database
+mongoose.connect(process.env.MONGO_URI)
+
+
+//Read JSON file
+const bootcamps = JSON.parse(fs.readFileSync(`${__dirname}/_data/bootcamps.json`, 'utf-8'))
+
+//Import data
+const importData = async () => {
+  try {
+    await Bootcamp.create(bootcamps)
+    console.log('Data imported...'.green.inverse)
+    process.exit()
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const deleteData = async () => {
+  try {
+    await Bootcamp.deleteMany()
+    console.log('Data Deleted...'.red.inverse)
+    process.exit()
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+
+if (process.argv[2] === '-i') {
+  importData()
+} else if (process.argv[2] === '-d') {
+  deleteData()
+}

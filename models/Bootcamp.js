@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const slugify = require('slugify')
+const geocoder = require('../utils/geocode')
 
 const bootcampSchema = new mongoose.Schema({
   name: { type: String, required: [true, 'Please add a name'], unique: true, trim: true, maxLength: [50, 'Name cannot be more than 50 characters'] },
@@ -72,7 +74,34 @@ const bootcampSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  averageCost: {
+    type: Number
   }
 })
+
+bootcampSchema.pre('save', async function () {
+  console.log('Slug ran', this.name)
+  this.slug = slugify(this.name, { lower: true, strict: true })
+})
+
+bootcampSchema.pre('save', async function () {
+  const loc = await geocoder.geocode(this.address)
+  this.location = {
+    type: 'Point',
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    city: loc[0].city,
+    state: loc[0].state,
+    country: loc[0].country
+  }
+
+  //Don't include address field in db , as we've done something neatly now
+  this.address = undefined
+})
+
+
+
+
 
 module.exports = mongoose.model('Bootcamp', bootcampSchema)
