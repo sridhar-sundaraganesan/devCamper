@@ -1,5 +1,5 @@
 const express = require('express')
-const { getAllCourses, getCourseById, createCourse, updateCourse } = require('../controller/courses')
+const { getAllCourses, getCourseById, createCourse, updateCourse, deleteCourse } = require('../controller/courses')
 const router = express.Router({ mergeParams: true })
 
 
@@ -10,6 +10,7 @@ router.route('/')
 router.route('/:id')
   .get(getCourseById)
   .put(updateCourse)
+  .delete(deleteCourse)
 
 
 module.exports = router

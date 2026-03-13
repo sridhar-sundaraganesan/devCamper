@@ -106,6 +106,7 @@ bootcampSchema.pre('save', async function () {
 
 
 
+
 //Reverse populating using Virtuals
 bootcampSchema.virtual('courses', {
   ref: 'Course',
@@ -114,6 +115,10 @@ bootcampSchema.virtual('courses', {
   justOne: false
 })
 
-
+//Cascade delete courses when bootcamp is deleted
+bootcampSchema.pre('findOneAndDelete', async function () {
+  const bootcampId = this.getQuery()._id;
+  await Course.deleteMany({ bootcamp: bootcampId });
+});
 
 module.exports = mongoose.model('Bootcamp', bootcampSchema)
