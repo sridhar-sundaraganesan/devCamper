@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const slugify = require('slugify')
 const geocoder = require('../utils/geocode')
+const Course = require('./Course')
 
 const bootcampSchema = new mongoose.Schema({
   name: { type: String, required: [true, 'Please add a name'], unique: true, trim: true, maxLength: [50, 'Name cannot be more than 50 characters'] },
@@ -78,6 +79,9 @@ const bootcampSchema = new mongoose.Schema({
   averageCost: {
     type: Number
   }
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 })
 
 bootcampSchema.pre('save', async function () {
@@ -101,6 +105,14 @@ bootcampSchema.pre('save', async function () {
 })
 
 
+
+//Reverse populating using Virtuals
+bootcampSchema.virtual('courses', {
+  ref: 'Course',
+  localField: '_id',
+  foreignField: 'bootcamp',
+  justOne: false
+})
 
 
 

@@ -2,15 +2,17 @@ const express = require('express')
 const dotenv = require('dotenv')
 const app = express()
 const bootcampRoute = require('./routes/bootcamps')
+const courseRoute = require('./routes/courses')
 const morgan = require('morgan')
 const connectDB = require('./config/db')
 const colors = require('colors')
 const errorHandler = require('./middleware/error')
 const qs = require('qs')
-//Body parser
 
+//Body parser
 app.use(express.json())
 
+//query parser
 app.set('query parser', str => qs.parse(str))
 
 dotenv.config({ path: `./config/config.env` })
@@ -25,6 +27,8 @@ if (process.env.NODE_ENV === 'development') {
 connectDB()
 
 app.use('/api/v1/bootcamps', bootcampRoute)
+app.use('/api/v1/courses', courseRoute)
+
 
 app.use(errorHandler)
 
