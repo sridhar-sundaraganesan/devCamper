@@ -3,6 +3,8 @@ const dotenv = require('dotenv')
 const app = express()
 const bootcampRoute = require('./routes/bootcamps')
 const courseRoute = require('./routes/courses')
+const authRoute = require('./routes/auth')
+const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
 const connectDB = require('./config/db')
 const colors = require('colors')
@@ -11,6 +13,7 @@ const qs = require('qs')
 
 //Body parser
 app.use(express.json())
+app.use(cookieParser())
 
 //query parser
 app.set('query parser', str => qs.parse(str))
@@ -28,6 +31,7 @@ connectDB()
 
 app.use('/api/v1/bootcamps', bootcampRoute)
 app.use('/api/v1/courses', courseRoute)
+app.use('/api/v1/auth', authRoute)
 
 
 app.use(errorHandler)
