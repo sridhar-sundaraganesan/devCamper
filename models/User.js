@@ -27,7 +27,6 @@ userSchema.methods.getSignedJwtToken = function () {
 
 
 //Match users password with hased password in DB using bcrypt.compare()
-
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password)
 }

@@ -5,6 +5,7 @@ const Course = require('./Course')
 
 const bootcampSchema = new mongoose.Schema({
   name: { type: String, required: [true, 'Please add a name'], unique: true, trim: true, maxLength: [50, 'Name cannot be more than 50 characters'] },
+  user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
   slug: String,
   description: { type: String, required: [true, 'Please add description'], maxLength: 500 },
   website: {

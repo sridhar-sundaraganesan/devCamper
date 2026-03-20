@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const courseSchema = new mongoose.Schema({
   title: { type: String, trim: true, required: [true, 'Please add course title'] },
   description: { type: String, required: [true, 'Please add course description'] },
+  user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
   weeks: { type: Number, required: [true, 'Please add course weeks'] },
   tuition: { type: Number, required: [true, 'Please enter cost of the course'] },
   minimumSkill: { type: String, required: [true, 'Please enter minimum skill'], enum: ['beginner', 'intermediate', 'advanced'] },

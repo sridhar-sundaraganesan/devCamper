@@ -10,6 +10,8 @@ const connectDB = require('./config/db')
 const colors = require('colors')
 const errorHandler = require('./middleware/error')
 const qs = require('qs')
+const mongoSanitize = require('express-mongo-sanitize')
+
 
 //Body parser
 app.use(express.json())
@@ -28,6 +30,9 @@ if (process.env.NODE_ENV === 'development') {
 
 //Connection to DB
 connectDB()
+
+//Sanitize data
+app.use(mongoSanitize({ replaceWith: '_' }))
 
 app.use('/api/v1/bootcamps', bootcampRoute)
 app.use('/api/v1/courses', courseRoute)
